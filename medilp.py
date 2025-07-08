@@ -57,7 +57,7 @@ if st is not None and OpenAIClient is not None:
 
                 try:
                     response = client.chat.completions.create(
-                        model="gpt-4",
+                        model="gpt-3.5-turbo",
                         messages=[{"role": "user", "content": prompt}]
                     )
 
