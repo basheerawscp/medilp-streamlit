@@ -7,7 +7,7 @@
 import os
 
 st = None
-openai = None
+OpenAIClient = None
 
 try:
     import streamlit as st
@@ -16,12 +16,13 @@ except ImportError:
 
 try:
     from openai import OpenAI
+    OpenAIClient = OpenAI
 except ImportError:
     print("Warning: OpenAI module is not installed. Please install it using 'pip install openai'.")
 
-if st is not None and OpenAI is not None:
+if st is not None and OpenAIClient is not None:
     # Initialize OpenAI client
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY") or "YOUR_OPENAI_API_KEY")
+    client = OpenAIClient(api_key=os.getenv("OPENAI_API_KEY") or "YOUR_OPENAI_API_KEY")
 
     st.set_page_config(page_title="AI Health Checker", page_icon="🩺")
 
