@@ -38,12 +38,12 @@ if submit:
 
             # Set OpenRouter API key and endpoint
             api_key = os.getenv("OPENROUTER_API_KEY") or "your-openrouter-key"
-            endpoint = "https://openrouter.ai/api/chat"
+            endpoint = "https://api.openrouter.ai/v1/chat/completions"
 
             headers = {
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
-                "HTTP-Referer": "https://your-app-name.streamlit.app",  # replace if different
+                "HTTP-Referer": "https://github.com/basheerawscp/medilp-streamlit",  # replace if different
                 "X-Title": "AI Health Checker"
             }
 
