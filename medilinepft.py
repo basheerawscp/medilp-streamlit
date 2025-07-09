@@ -38,12 +38,15 @@ if submit:
 
             # Set OpenRouter or Groq API key and endpoint
             api_key = os.getenv("OPENROUTER_API_KEY") or "your-openrouter-key"
-            endpoint = "https://openrouter.ai/api/v1/chat/completions"
+            endpoint = "https://openrouter.ai/api/chat"
 
-            headers = {
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json"
-            }
+            hheaders = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json",
+    "HTTP-Referer": "https://your-app-name.streamlit.app",  # or your GitHub repo if hosted there
+    "X-Title": "AI Health Checker"
+}
+
 
             data = {
                 "model": "openai/gpt-3.5-turbo",  # or try "mistralai/mixtral-8x7b" for free use
