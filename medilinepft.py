@@ -40,7 +40,7 @@ if submit:
             api_key = os.getenv("OPENROUTER_API_KEY") or "your-openrouter-key"
             endpoint = "https://openrouter.ai/api/chat"
 
-            hheaders = {
+            headers = {
     "Authorization": f"Bearer {api_key}",
     "Content-Type": "application/json",
     "HTTP-Referer": "https://your-app-name.streamlit.app",  # or your GitHub repo if hosted there
