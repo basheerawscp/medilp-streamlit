@@ -7,8 +7,9 @@ import requests
 import smtplib
 from email.message import EmailMessage
 from io import BytesIO
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
+from reportlab.lib.utils import simpleSplit
 import datetime
 
 st.set_page_config(page_title="AI Health Checker", page_icon="🩺")
@@ -26,9 +27,10 @@ uae_clinics = {
 # Function to create PDF report
 def generate_pdf(user_data, ai_response):
     buffer = BytesIO()
-    p = canvas.Canvas(buffer, pagesize=letter)
+    p = canvas.Canvas(buffer, pagesize=A4)
     p.setFont("Helvetica", 12)
-    y = 750
+    width, height = A4
+    y = height - 50
 
     p.drawString(50, y, f"AI Health Report - {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     y -= 30
@@ -41,12 +43,14 @@ def generate_pdf(user_data, ai_response):
     p.drawString(50, y, "AI Response:")
     y -= 20
 
-    for line in ai_response.splitlines():
-        p.drawString(60, y, line.strip())
+    wrapped_lines = simpleSplit(ai_response, 'Helvetica', 12, width - 100)
+    for line in wrapped_lines:
+        p.drawString(60, y, line)
         y -= 15
         if y < 50:
             p.showPage()
-            y = 750
+            p.setFont("Helvetica", 12)
+            y = height - 50
 
     p.save()
     buffer.seek(0)
