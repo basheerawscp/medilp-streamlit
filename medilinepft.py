@@ -36,20 +36,19 @@ if submit:
             Add a friendly tone and recommend seeing a doctor if needed.
             """
 
-            # Set OpenRouter or Groq API key and endpoint
+            # Set OpenRouter API key and endpoint
             api_key = os.getenv("OPENROUTER_API_KEY") or "your-openrouter-key"
             endpoint = "https://openrouter.ai/api/chat"
 
             headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json",
-    "HTTP-Referer": "https://your-app-name.streamlit.app",  # or your GitHub repo if hosted there
-    "X-Title": "AI Health Checker"
-}
-
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://your-app-name.streamlit.app",  # replace if different
+                "X-Title": "AI Health Checker"
+            }
 
             data = {
-                "model": "openai/gpt-3.5-turbo",  # or try "mistralai/mixtral-8x7b" for free use
+                "model": "mistralai/mixtral-8x7b",  # free model
                 "messages": [
                     {"role": "user", "content": prompt}
                 ]
@@ -58,13 +57,17 @@ if submit:
             try:
                 response = requests.post(endpoint, headers=headers, json=data)
                 response.raise_for_status()
-                result = response.json()
-                reply = result["choices"][0]["message"]["content"].strip()
-                st.success("Here's what the AI suggests:")
-                st.write(reply)
 
-            except Exception as e:
-                st.error(f"Error: {str(e)}")
+                try:
+                    result = response.json()
+                    reply = result["choices"][0]["message"]["content"].strip()
+                    st.success("Here's what the AI suggests:")
+                    st.write(reply)
+                except ValueError:
+                    st.error("Error: Unable to parse JSON response. Response content was:\n" + response.text)
+
+            except requests.exceptions.RequestException as e:
+                st.error(f"Request failed: {e}")
 
 # Footer
 st.markdown("---")
